@@ -33,14 +33,6 @@
         #searchResults::-webkit-scrollbar-thumb:hover {
             background: #A78BFA; /* Darker purple on hover */
         }
-        .settings-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.5s ease-in-out;
-        }
-        .settings-content.open {
-            max-height: 500px; /* Adjust as needed */
-        }
         
         /* Layout Styles */
         .player.layout-horizontal {
@@ -91,80 +83,27 @@
         .player.layout-vertical .controls-section canvas {
             margin-left: 0;
         }
+
+        /* New Settings Panel Styles */
+        #settingsPanel {
+            opacity: 0;
+            transform: scale(0.95) translateY(10px);
+            transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+            pointer-events: none;
+        }
+        #settingsPanel.open {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+            pointer-events: auto;
+        }
+
     </style>
 </head>
 <body class="flex items-center justify-center min-h-screen">
     <div class="w-full max-w-3xl mx-auto p-4">
-        <header class="text-center mb-6">
-            <h1 id="mainTitle" class="text-2xl font-bold text-purple-800">Music search</h1>
-        </header>
-
-        <!-- Settings Section -->
-        <div class="card mb-6 overflow-hidden">
-            <div id="settingsToggle" class="flex justify-between items-center p-4 bg-purple-600 text-white cursor-pointer">
-                <h2 class="font-bold">설정 열기/닫기</h2>
-                <svg id="settingsArrow" class="w-6 h-6 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-            </div>
-            <div id="settingsContent" class="settings-content p-6 space-y-6">
-                <div>
-                    <label for="displayNameInput" class="block text-sm font-medium text-gray-700">표시 채널명</label>
-                    <div class="mt-1 flex space-x-2">
-                        <input type="text" id="displayNameInput" placeholder="채널명을 입력하세요" class="flex-grow px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500">
-                        <button id="applyDisplayName" class="px-4 py-2 bg-purple-500 text-white rounded-md hover:bg-purple-600">적용</button>
-                    </div>
-                </div>
-                <div>
-                    <label for="imageUpload" class="block text-sm font-medium text-gray-700">커버 이미지 업로드</label>
-                    <div class="mt-2 flex space-x-2">
-                         <label class="cursor-pointer px-4 py-2 bg-purple-500 text-white rounded-md hover:bg-purple-600">
-                            <span>이미지 업로드</span>
-                            <input type="file" id="imageUpload" class="hidden" accept="image/*">
-                         </label>
-                         <button id="revertCover" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300">원래 썸네일</button>
-                    </div>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">카드 색상</label>
-                    <div class="mt-2 flex items-center space-x-2">
-                        <div class="flex flex-col items-center">
-                            <span class="text-xs text-gray-500 mb-1">기본 색상</span>
-                            <input type="color" id="primaryColor" value="#A855F7" class="w-10 h-10 p-1 border-0 rounded-md cursor-pointer">
-                        </div>
-                        <div class="flex flex-col items-center">
-                            <span class="text-xs text-gray-500 mb-1">보조 색상</span>
-                            <input type="color" id="secondaryColor" value="#7C3AED" class="w-10 h-10 p-1 border-0 rounded-md cursor-pointer">
-                        </div>
-                        <button id="applyColors" class="self-end px-4 py-2 bg-purple-500 text-white rounded-md hover:bg-purple-600">색상 적용</button>
-                        <button id="resetColors" class="self-end px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300">기본 색상</button>
-                    </div>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">카드 레이아웃</label>
-                    <div class="mt-2 flex space-x-2">
-                        <button id="layoutHorizontalBtn" class="px-4 py-2 bg-purple-500 text-white rounded-md hover:bg-purple-600 transition-colors">가로형</button>
-                        <button id="layoutVerticalBtn" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors">세로형</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <main class="card p-6">
-            <!-- Search Section -->
-            <div class="flex items-center space-x-2">
-                <input type="text" id="searchInput" placeholder="아티스트나 곡명을 검색하세요..." class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition">
-                <button id="searchButton" class="bg-purple-600 text-white px-5 py-2 rounded-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50 transition-transform transform active:scale-95">
-                    검색
-                </button>
-            </div>
-             <!-- Loading and Results Section -->
-            <div id="status" class="text-center text-gray-500 mt-4 h-6"></div>
-            <div id="searchResults" class="mt-4 max-h-64 overflow-y-auto space-y-2">
-                <!-- Search results will be injected here -->
-            </div>
-        </main>
-
-        <!-- Player Section (Now called "Card") -->
-        <footer class="mt-8 flex justify-center">
+        
+        <!-- Player Section (Now called "Card") - MOVED TO TOP -->
+        <div class="mb-8 flex justify-center">
             <div id="player" class="player flex p-4 rounded-2xl shadow-lg text-white transition-all duration-500 ease-in-out transform layout-horizontal">
                 <img id="albumArt" src="https://placehold.co/80x80/6d28d9/ffffff?text=Album" alt="Album Art" class="album-art rounded-lg shadow-md flex-shrink-0 transition-all">
                 <div class="flex-grow min-w-0 info-section">
@@ -187,9 +126,79 @@
                     <canvas id="waveformCanvas" width="120" height="40" class="ml-4"></canvas>
                 </div>
             </div>
-        </footer>
+        </div>
 
+        <header class="text-center mb-6">
+            <h1 id="mainTitle" class="text-2xl font-bold text-purple-800">Music search</h1>
+        </header>
+        
+        <main>
+            <!-- Search Section -->
+            <div class="flex items-center space-x-2 mb-6 card p-4">
+                <input type="text" id="searchInput" placeholder="아티스트나 곡명을 검색하세요..." class="w-full px-4 py-2 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition">
+                <button id="searchButton" class="bg-purple-600 text-white px-5 py-2 rounded-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50 transition-transform transform active:scale-95">
+                    검색
+                </button>
+            </div>
+             <!-- Loading and Results Section -->
+            <div id="status" class="text-center text-gray-500 mb-4 h-6"></div>
+            <div id="searchResults" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                <!-- Search results will be injected here -->
+            </div>
+        </main>
     </div>
+
+    <!-- Settings Icon and Panel -->
+    <div class="fixed bottom-6 right-6 z-50">
+        <!-- The icon itself -->
+        <button id="settingsIconBtn" class="bg-purple-600 text-white rounded-full p-3 shadow-lg hover:bg-purple-700 transition transform hover:scale-110 focus:outline-none">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+        </button>
+
+        <!-- The panel -->
+        <div id="settingsPanel" class="card absolute bottom-20 right-0 w-80 bg-white p-6 rounded-2xl shadow-2xl origin-bottom-right space-y-6">
+            <div>
+                <label for="displayNameInput" class="block text-sm font-medium text-gray-700">표시 채널명</label>
+                <div class="mt-1 flex space-x-2">
+                    <input type="text" id="displayNameInput" placeholder="채널명을 입력하세요" class="flex-grow px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500">
+                    <button id="applyDisplayName" class="px-4 py-2 bg-purple-500 text-white rounded-md hover:bg-purple-600">적용</button>
+                </div>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">커버 이미지 업로드</label>
+                <div class="mt-2 flex space-x-2">
+                     <label class="cursor-pointer px-4 py-2 bg-purple-500 text-white rounded-md hover:bg-purple-600">
+                        <span>이미지 업로드</span>
+                        <input type="file" id="imageUpload" class="hidden" accept="image/*">
+                     </label>
+                     <button id="revertCover" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300">원래 썸네일</button>
+                </div>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">카드 색상</label>
+                <div class="mt-2 flex items-center space-x-2">
+                    <div class="flex flex-col items-center">
+                        <span class="text-xs text-gray-500 mb-1">기본 색상</span>
+                        <input type="color" id="primaryColor" value="#A855F7" class="w-10 h-10 p-1 border-0 rounded-md cursor-pointer">
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <span class="text-xs text-gray-500 mb-1">보조 색상</span>
+                        <input type="color" id="secondaryColor" value="#7C3AED" class="w-10 h-10 p-1 border-0 rounded-md cursor-pointer">
+                    </div>
+                    <button id="applyColors" class="self-end px-4 py-2 bg-purple-500 text-white rounded-md hover:bg-purple-600">색상 적용</button>
+                    <button id="resetColors" class="self-end px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300">기본 색상</button>
+                </div>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">카드 레이아웃</label>
+                <div class="mt-2 flex space-x-2">
+                    <button id="layoutHorizontalBtn" class="px-4 py-2 bg-purple-500 text-white rounded-md hover:bg-purple-600 transition-colors">가로형</button>
+                    <button id="layoutVerticalBtn" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors">세로형</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -210,9 +219,8 @@
             const artistNameP = document.getElementById('artistName');
 
             // Settings Elements
-            const settingsToggle = document.getElementById('settingsToggle');
-            const settingsContent = document.getElementById('settingsContent');
-            const settingsArrow = document.getElementById('settingsArrow');
+            const settingsIconBtn = document.getElementById('settingsIconBtn');
+            const settingsPanel = document.getElementById('settingsPanel');
             const displayNameInput = document.getElementById('displayNameInput');
             const applyDisplayName = document.getElementById('applyDisplayName');
             const imageUpload = document.getElementById('imageUpload');
@@ -240,9 +248,8 @@
 
             // --- Event Listeners for Settings ---
 
-            settingsToggle.addEventListener('click', () => {
-                settingsContent.classList.toggle('open');
-                settingsArrow.classList.toggle('rotate-180');
+            settingsIconBtn.addEventListener('click', () => {
+                settingsPanel.classList.toggle('open');
             });
             
             applyDisplayName.addEventListener('click', () => {
@@ -305,24 +312,45 @@
 
             // --- Decorative Waveform Animation ---
             const canvasCtx = waveformCanvas.getContext('2d');
-            let frame = 0;
+            const barCount = 12;
+            const barWidth = 4;
+            const spacing = 9;
+            let barHeights = new Array(barCount).fill(barWidth);
+            let targetHeights = new Array(barCount).fill(barWidth);
+            let frameCounter = 0;
 
             function drawDecorativeWaveform() {
-                frame++;
+                frameCounter++;
                 const width = waveformCanvas.width;
                 const height = waveformCanvas.height;
-                const barCount = 15;
-                const barWidth = width / barCount / 2;
+
+                // Periodically generate new random target heights
+                if (frameCounter % 20 === 0) { // Update targets every 20 frames
+                    for (let i = 0; i < barCount; i++) {
+                        const maxBarHeight = height * 0.9;
+                        const newHeight = Math.random() * maxBarHeight;
+                        targetHeights[i] = Math.max(barWidth, newHeight);
+                    }
+                }
 
                 canvasCtx.clearRect(0, 0, width, height);
+                canvasCtx.strokeStyle = 'rgba(255, 255, 255, 0.85)';
+                canvasCtx.lineWidth = barWidth;
+                canvasCtx.lineCap = 'round';
 
                 for (let i = 0; i < barCount; i++) {
-                    const barHeight = (Math.sin((frame + i * 5) * 0.1) + 1) * (height / 2.5) + (height * 0.1);
-                    const x = i * (barWidth * 2 + 3);
-                    const y = height - barHeight;
+                    // Smoothly transition current height to target height (easing)
+                    barHeights[i] += (targetHeights[i] - barHeights[i]) * 0.08; // Easing factor
 
-                    canvasCtx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-                    canvasCtx.fillRect(x, y, barWidth, barHeight);
+                    const barHeight = barHeights[i];
+                    const x = i * spacing + (spacing / 2);
+                    const y1 = height / 2 - barHeight / 2;
+                    const y2 = height / 2 + barHeight / 2;
+                    
+                    canvasCtx.beginPath();
+                    canvasCtx.moveTo(x, y1);
+                    canvasCtx.lineTo(x, y2);
+                    canvasCtx.stroke();
                 }
 
                 requestAnimationFrame(drawDecorativeWaveform);
@@ -370,7 +398,7 @@
                 searchResultsContainer.innerHTML = '';
 
                 try {
-                    const response = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(query)}&type=track&limit=10`, {
+                    const response = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(query)}&type=track&limit=20`, {
                         headers: { 'Authorization': `Bearer ${accessToken}` }
                     });
 
@@ -393,6 +421,7 @@
             };
             
             const displayResults = (tracks) => {
+                searchResultsContainer.innerHTML = '';
                 if (tracks.length === 0) {
                     statusDiv.textContent = '검색 결과가 없습니다.';
                     return;
@@ -400,22 +429,24 @@
                 statusDiv.textContent = '';
 
                 tracks.forEach(track => {
-                    const trackDiv = document.createElement('div');
-                    trackDiv.className = 'flex items-center p-2 rounded-lg cursor-pointer hover:bg-gray-100 transition';
+                    const trackCard = document.createElement('div');
+                    trackCard.className = 'bg-white rounded-xl p-3 cursor-pointer hover:shadow-lg transition-shadow group';
                     
-                    const albumImage = track.album.images[2] ? track.album.images[2].url : 'https://placehold.co/64x64/f3e8ff/6d28d9?text=?';
+                    const albumImage = track.album.images[1] ? track.album.images[1].url : 'https://placehold.co/300x300/e9d5ff/a855f7?text=?';
                     const artistNames = track.artists.map(artist => artist.name).join(', ');
 
-                    trackDiv.innerHTML = `
-                        <img src="${albumImage}" alt="${track.album.name}" class="w-12 h-12 rounded">
-                        <div class="ml-3 min-w-0">
-                            <p class="font-semibold text-gray-800 truncate">${track.name}</p>
-                            <p class="text-sm text-gray-500 truncate">${artistNames}</p>
+                    trackCard.innerHTML = `
+                        <div class="relative">
+                            <img src="${albumImage}" alt="${track.album.name}" class="w-full rounded-lg shadow-sm aspect-square object-cover">
+                        </div>
+                        <div class="mt-2 text-center">
+                            <p class="font-bold text-gray-900 truncate text-sm">${track.name}</p>
+                            <p class="text-xs text-gray-600 truncate">${artistNames}</p>
                         </div>
                     `;
                     
-                    trackDiv.addEventListener('click', () => updatePlayerUI(track));
-                    searchResultsContainer.appendChild(trackDiv);
+                    trackCard.addEventListener('click', () => updatePlayerUI(track));
+                    searchResultsContainer.appendChild(trackCard);
                 });
             };
 

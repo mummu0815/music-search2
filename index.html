@@ -31,7 +31,7 @@
         .player.layout-horizontal .info-section { 
             margin-left: 1rem; 
             text-align: left; 
-            min-width: 0; /* 이 요소가 Flex 아이템으로서 줄어들도록 허용 */
+            min-width: 0; 
             overflow: hidden;
         }
         .player.layout-horizontal .info-section .flex { justify-content: flex-start; }
@@ -65,7 +65,7 @@
                 <div class="flex-grow min-w-0 info-section">
                     <h2 id="trackTitle" class="font-bold text-lg min-w-0 truncate">노래 제목</h2>
                     <p id="trackArtist" class="text-white text-sm mt-1 min-w-0 truncate">아티스트 이름</p>
-                    <div class="flex items-center text-sm opacity-80 mt-2">
+                    <div id="channelSection" class="flex items-center text-sm mt-2">
                         <span class="mr-2">SING 🎤</span>
                         <p id="artistName">채널명</p>
                     </div>
@@ -145,6 +145,12 @@
                 </div>
             </div>
             <div>
+                <label class="block text-sm font-medium text-gray-700">채널명 표시</label>
+                <div class="mt-2">
+                    <button id="toggleChannelSection" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300">숨기기</button>
+                </div>
+            </div>
+            <div>
                 <label for="waveformSpeed" class="block text-sm font-medium text-gray-700">파형 속도</label>
                 <div class="mt-1 flex items-center space-x-2">
                     <span class="text-xs text-gray-500">느리게</span>
@@ -172,6 +178,7 @@
             const trackTitleSpan = document.getElementById('trackTitle');
             const trackArtistSpan = document.getElementById('trackArtist');
             const artistNameP = document.getElementById('artistName');
+            const channelSection = document.getElementById('channelSection');
             const waveformCanvas = document.getElementById('waveformCanvas');
 
             // Settings Elements
@@ -190,6 +197,7 @@
             const bgColorPicker = document.getElementById('bgColorPicker');
             const applyBgColor = document.getElementById('applyBgColor');
             const resetBgColor = document.getElementById('resetBgColor');
+            const toggleChannelSectionBtn = document.getElementById('toggleChannelSection');
             const waveformSpeed = document.getElementById('waveformSpeed');
 
             // --- State Variables ---
@@ -228,6 +236,19 @@
                 playerDiv.classList.toggle('layout-vertical', layout === 'vertical');
                 updateLayoutButtons(layout);
                 updatePlayerGradient();
+            };
+
+            const toggleChannelVisibility = (isVisible) => {
+                if (isVisible) {
+                    channelSection.classList.remove('opacity-0', 'invisible');
+                    channelSection.classList.add('opacity-100', 'visible');
+                    toggleChannelSectionBtn.textContent = '숨기기';
+                } else {
+                    channelSection.classList.remove('opacity-100', 'visible');
+                    channelSection.classList.add('opacity-0', 'invisible');
+                    toggleChannelSectionBtn.textContent = '보이기';
+                }
+                saveSetting('channelSectionVisible', isVisible);
             };
 
             // --- Waveform Animation ---
@@ -317,6 +338,11 @@
                 localStorage.removeItem('backgroundColor');
             });
 
+            toggleChannelSectionBtn.addEventListener('click', () => {
+                const isVisible = channelSection.classList.contains('visible');
+                toggleChannelVisibility(!isVisible);
+            });
+
             waveformSpeed.addEventListener('input', () => {
                 waveformEasingFactor = parseInt(waveformSpeed.value) / 100;
                 saveSetting('waveformSpeed', waveformSpeed.value);
@@ -349,6 +375,10 @@
                 // Layout
                 const savedLayout = loadSetting('layout', 'horizontal');
                 applyLayout(savedLayout);
+                
+                // Channel Visibility
+                const isChannelVisible = loadSetting('channelSectionVisible', 'true') === 'true';
+                toggleChannelVisibility(isChannelVisible);
 
                 // Waveform Speed
                 const savedSpeed = loadSetting('waveformSpeed', '8');

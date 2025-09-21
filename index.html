@@ -28,7 +28,12 @@
         /* Layout Styles */
         .player.layout-horizontal { flex-direction: row; align-items: center; width: 100%; }
         .player.layout-horizontal .album-art { width: 5rem; height: 5rem; }
-        .player.layout-horizontal .info-section { margin-left: 1rem; text-align: left; }
+        .player.layout-horizontal .info-section { 
+            margin-left: 1rem; 
+            text-align: left; 
+            min-width: 0; /* 이 요소가 Flex 아이템으로서 줄어들도록 허용 */
+            overflow: hidden;
+        }
         .player.layout-horizontal .info-section .flex { justify-content: flex-start; }
         .player.layout-horizontal .controls-section { flex-direction: row; align-items: center; }
 
@@ -58,11 +63,9 @@
             <div id="player" class="player flex p-4 rounded-2xl shadow-lg text-white transition-all duration-500 ease-in-out transform layout-horizontal">
                 <img id="albumArt" src="https://placehold.co/80x80/6d28d9/ffffff?text=Album" alt="Album Art" class="album-art rounded-lg shadow-md flex-shrink-0 transition-all">
                 <div class="flex-grow min-w-0 info-section">
-                    <h2 id="trackTitleWrapper" class="font-bold text-lg flex min-w-0 items-baseline">
-                        <span id="trackTitle" class="truncate">노래 제목</span>
-                        <span id="trackArtist" class="ml-2 flex-shrink-0"></span>
-                    </h2>
-                    <div class="flex items-center text-sm opacity-80">
+                    <h2 id="trackTitle" class="font-bold text-lg min-w-0 truncate">노래 제목</h2>
+                    <p id="trackArtist" class="text-white text-sm mt-1 min-w-0 truncate">아티스트 이름</p>
+                    <div class="flex items-center text-sm opacity-80 mt-2">
                         <span class="mr-2">SING 🎤</span>
                         <p id="artistName">채널명</p>
                     </div>
@@ -434,7 +437,7 @@
                     albumArtImg.src = imageUrl;
                 }
                 trackTitleSpan.textContent = track.name;
-                trackArtistSpan.textContent = `- ${artistNames}`;
+                trackArtistSpan.textContent = artistNames;
             };
 
             // --- Initial Setup & Search Listeners ---
